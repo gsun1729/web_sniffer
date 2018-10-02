@@ -48,7 +48,6 @@ def process(args):
     options = get_args(args)
     mode = options['mode']
     query = options['input']
-    output_path = options['output_path']
     database_path = options['LUT']
     if mode != 's' and mode != 'b':
         raise Exception('-mode should be specified as either \'s\' or \'b\'')
@@ -60,23 +59,25 @@ def process(args):
         gene_name, strain = search(query)
         print("Query:\t{}\nSystemic Name:\t{}\nStrain:\t{}\n".format(query, gene_name, strain))
     else:
+        output_path = options['output_path']
+        if output_path == None:
+            raise Exception('Output Filepath required [-o]')
+        results_file = open(output_path, 'w')
         query_data = process_txtfile(query)
         lower_flatten =  lambda list: [item.lower() for sublist in list for item in sublist]
         query_data = lower_flatten(query_data)
+
         for query in query_data:
-            print query
             for r_index, row in enumerate(lookup_database):
                 found = False
                 if row[-1] == query.lower():
                     gene_name, strain = search(query)
                     found = True
-                    print gene_name, strain, query
+                    results_file.write("%s\t%s\t%s\n" % (query, gene_name, strain))
                     break
             if not found:
-                print "not found"
-
-            raise Exception
-
+                results_file.write("%s\t%s\t%s\n" % (query, "NA", "NA"))
+        results_file.close()
 
 
 # https://www.yeastgenome.org/search?q=YBR011C&is_quick=true
