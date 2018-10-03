@@ -31,14 +31,26 @@ def main(args):
 
     s12_difference = list(set(set1_data)-set(set2_data))
     s21_difference = list(set(set2_data)-set(set1_data))
-    intersection = list(set(set1_data).intersection(set2_data)))
+    intersection = list(set(set1_data).intersection(set2_data))
 
     file = open(write_path, 'w')
     file.write("Set1 Path: {}\n".format(set1))
     file.write("Set2 Path: {}\n".format(set2))
     file.write("Set1 Size: {}\n".format(len(set(set1_data))))
     file.write("Set2 Size: {}\n".format(len(set(set1_data))))
-    file.write("Set1, Set2 Intersection size: {}\n".format())
+    file.write("Set1, Set2 Intersection size: {}\n".format(len(intersection)))
+    file.write("Set1-Set2 Difference size: {}\n".format(len(s12_difference)))
+    file.write("Set2-Set1 Difference size: {}\n".format(len(s21_difference)))
+    file.write('=====================\n')
+    for item in intersection:
+        file.write("%s\n" % item)
+    file.write('=====================\n')
+    for item in s12_difference:
+        file.write("%s\n" % item)
+    file.write('=====================\n')
+    for item in s21_difference:
+        file.write("%s\n" % item)
+
 
 
 if __name__ == "__main__":
